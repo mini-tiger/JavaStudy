@@ -1,0 +1,36 @@
+package basic.方法;
+
+
+public class 参数传递 {
+    public static void main(String args[]) {
+
+        // 调用可变参数的方法
+        double x= printMax(34, 3, 3, 2, 56.5); // 注意格式
+        double y=printMax(new double[]{1, 2, 3});// 注意格式
+        printdd(x,y);
+    }
+
+
+    public static void printdd(double x,double y){
+        System.out.println(x);
+        System.out.println(y);
+    }
+
+    public static double printMax(double... numbers) { // 注意格式
+        if (numbers.length == 0) {
+            System.out.println("No argument passed");
+            return 0;
+        }
+
+        double result = numbers[0];
+
+        for (int i = 1; i < numbers.length; i++) {
+            if (numbers[i] > result) {
+                result = numbers[i];
+            }
+        }
+        System.out.println("The max value is " + result);
+        return result;
+    }
+
+}
