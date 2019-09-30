@@ -191,8 +191,8 @@ public class ReadFromFile {
 //定义基本目录
         Path base = Paths.get(directory.getAbsolutePath());
 
-//resolve Business.java file
-        Path path1 = base.resolve("src\\models\\读文件\\1.txt");
+//resolve Business.java fileD:\JavaStudy\src\main\java\models\读文件\1.txt
+        Path path1 = base.resolve("src\\main\\java\\models\\读文件\\1.txt");
         System.out.println(path1);
 //
 //        Path baseDirectory=directory.getAbsolutePath();
