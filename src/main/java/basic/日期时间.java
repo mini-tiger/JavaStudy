@@ -15,7 +15,7 @@ public class 日期时间 {
         calendar1.add(Calendar.SECOND,1);
         String firstDay = sdf.format(calendar1.getTime());
 
-        System.out.println(Date2TimeStamp(firstDay,"yyyy-MM-dd"));
+        System.out.println(Date2TimeStamp(firstDay,"yyyy-MM-dd")+1000);
         //获取前一个月最后一天
         Calendar calendar2 = Calendar.getInstance();
         calendar2.set(Calendar.DAY_OF_MONTH, 0);
@@ -47,7 +47,7 @@ public class 日期时间 {
     public static long Date2TimeStamp(String dateStr, String format) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format);
-            return sdf.parse(dateStr).getTime() / 1000;
+            return sdf.parse(dateStr).getTime() ;
         } catch (Exception e) {
             e.printStackTrace();
         }
