@@ -11,6 +11,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
@@ -31,7 +32,10 @@ public class WriteExcel {
             file.createNewFile();
         }
         os = new FileOutputStream(file);
-        book = new XSSFWorkbook();
+        XSSFWorkbook Xbook = new XSSFWorkbook();
+
+        // todo 大数据写入使用SXSSFWorkbook
+        book = new SXSSFWorkbook(Xbook,100,true);
         Sheet sheet = book.createSheet("user");
 
         String[] title = {"用户名", "密码", "昵称"};
