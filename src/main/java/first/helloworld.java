@@ -1,10 +1,10 @@
 package first;
 
-//D:\JavaDev\src>cd first
+//D:\JavaDev\src>cd 生成表格
 //
-//D:\JavaDev\src\first>javac -d . *.java
+//D:\JavaDev\src\生成表格>javac -d . *.java
 //
-//D:\JavaDev\src\first>java first/helloworld
+//D:\JavaDev\src\生成表格>java 生成表格/helloworld
 //        Hello World
 
 public class helloworld {

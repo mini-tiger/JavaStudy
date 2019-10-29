@@ -28,7 +28,12 @@ public class 路径 {
 
 //resolve Server.java file
         Path path2 = base.resolve("Server.java");
-        System.out.println(path2);
+        System.out.println(path2.toAbsolutePath());
+
+        // 路径 拼接
+        Path p = Paths.get(directory.getAbsolutePath(),"src","main","java","models","PDF","生成表格.pdf");
+        System.out.println(p);
+
     }
 
 
