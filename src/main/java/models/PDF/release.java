@@ -75,16 +75,16 @@ public class release {
      */
     public static void generateFinalPdf(String newPath, String finalPath, String baselineType, Object[][] baselineData) throws Exception {
         FileOutputStream outputStream = new FileOutputStream(finalPath);
-        PdfReader reader = new PdfReader(newPath);// 读取pdf模板,已经是加载过 模板变量的PDF
+        PdfReader reader = new PdfReader(newPath);// 读取pdf,已经是加载过 模板变量的PDF
         Rectangle pageInstance = reader.getPageSize(1); // 获取第1页的对象
         Document document = new Document(pageInstance);
         PdfWriter writer = PdfWriter.getInstance(document, outputStream); //PDF可写的对象
         document.setPageSize(PageSize.A4); // 设置为A4大小
         document.open();
         PdfContentByte cb = writer.getDirectContentUnder(); // 页面的对象，画布
-        PdfImportedPage pageTemplate = writer.getImportedPage(reader, 1); // 定位到第1页
+        PdfImportedPage pageTemplate = writer.getImportedPage(reader, 1); // 读取PDF为一页数据
 
-        cb.addTemplate(pageTemplate, 0, 0); // 0,0 位置
+        cb.addTemplate(pageTemplate, 0, 0); // 将之前的PDF 添加到0,0 位置
 
         BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
         cb.beginText();
@@ -120,10 +120,10 @@ public class release {
     }
 
     public static PdfPTable generatePdfATATable(Object[][] datas) throws Exception {
-        float[] widths = {144, 113, 191};
+        float[] widths = {144, 113, 191}; // 每列的宽度
         PdfPTable table = new PdfPTable(widths);
         table.setLockedWidth(true);
-        table.setTotalWidth(458);
+        table.setTotalWidth(458); // 表格总共有宽度
         table.setHorizontalAlignment(Element.ALIGN_LEFT);
 
 //        BaseFont bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
