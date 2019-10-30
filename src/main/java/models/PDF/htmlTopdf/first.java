@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,8 +42,9 @@ import java.util.HashMap;
  * Created by admin on 2017/7/5.
  */
 public class first {
-    private static final String CONTRACT = "C:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//文件存储路径
-    private static final String TEMPLATE = "C:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//模板存储路径
+
+    private static final String CONTRACT = "D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//文件存储路径
+    private static final String TEMPLATE = "D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//模板存储路径
 
 
     private static final String PDFNAME = "11";//pdf文件名
