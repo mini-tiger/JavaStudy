@@ -66,8 +66,8 @@ public class first {
         }
         String localPdfUrl = localFile + "/" + PDFNAME + ".pdf";
 //        templateName = templateName + ".ftl";
-        htmHandler(templatePath, templateName, localHtmlUrl, paramMap);// 生成html合同
-        pdfHandler(localHtmlUrl, localPdfUrl);// 根据html合同生成pdf合同
+//        htmHandler(templatePath, templateName, localHtmlUrl, paramMap);// 生成html合同
+        pdfHandler("D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf\\hello.html", localPdfUrl);// 根据html合同生成pdf合同
         deleteFile(localHtmlUrl);// 删除html格式合同
 
         System.out.println("PDF生成成功");
@@ -79,17 +79,37 @@ public class first {
     }
 
     private static void pdfHandler(String htmUrl, String pdfUrl) throws IOException, DocumentException {
-        File htmFile = new File(htmUrl);
-        File pdfFile = new File(pdfUrl);
-        String url = htmFile.toURI().toURL().toString();
-        OutputStream os = new FileOutputStream(pdfFile);
-        ITextRenderer renderer = new ITextRenderer();
-        renderer.setDocument(url);
-        ITextFontResolver fontResolver = renderer.getFontResolver();
-        fontResolver.addFont(TEMPLATE +File.separator+ "simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-        renderer.layout();
-        renderer.createPDF(os);
-        os.close();
+//        File htmFile = new File(htmUrl);
+////        File pdfFile = new File(pdfUrl);
+////        String url = htmFile.toURI().toURL().toString();
+////        OutputStream os = new FileOutputStream(pdfFile);
+////        ITextRenderer renderer = new ITextRenderer();
+////        renderer.setDocument(url);
+////        ITextFontResolver fontResolver = renderer.getFontResolver();
+////        fontResolver.addFont(TEMPLATE +File.separator+ "simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+////        renderer.layout();
+////        renderer.createPDF(os);
+////        os.close();
+        try {
+            InputStream htmlFileStream = new FileInputStream("D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf\\hello.html");
+            // 创建一个document对象实例
+            Document document = new Document(PageSize.A4.rotate());
+            // 为该Document创建一个Writer实例
+            PdfWriter pdfwriter = PdfWriter.getInstance(document,
+                    new FileOutputStream("D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf\\11.pdf"));
+            pdfwriter.setViewerPreferences(PdfWriter.HideToolbar);
+            // 打开当前的document
+            document.open();
+            InputStreamReader isr = new InputStreamReader(htmlFileStream, "UTF-8");
+            XMLWorkerHelper.getInstance().parseXHtml(pdfwriter, document,htmlFileStream,null,null,new MyFontsProvider());
+            //XMLWorkerHelper.getInstance().p
+            document.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private static void htmHandler(String templatePath, String templateName, String hHtmlUrl, HashMap paramMap) throws IOException, TemplateException {
@@ -110,5 +130,24 @@ public class first {
         paramMap.put("url", "192.168.1.2");
         paramMap.put("name", "生成成功");
         contractHandler(templateName, paramMap);
+    }
+}
+class MyFontsProvider extends XMLWorkerFontProvider {
+
+    public MyFontsProvider(){
+        super(null, null);
+    }
+
+    @Override
+    public Font getFont(final String fontname, String encoding, float size, final int style) {
+        String fntname = fontname;
+        if (fntname == null) {
+            fntname = "宋体";//windows下
+            //fntname = "fontFile/simsun.ttf";//linux系统下
+        }
+        if (size == 0) {
+            size = 4;
+        }
+        return super.getFont(fntname, encoding, size, style);
     }
 }

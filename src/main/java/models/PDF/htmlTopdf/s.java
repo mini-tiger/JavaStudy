@@ -33,6 +33,9 @@ public class s {
         test1.put("one", "1");
         test1.put("two", "2");
         test1.put("three", "3");
+        for (int i=0;i<1000;i++){
+            test1.put(String.valueOf(i),String.valueOf(i*i));
+        }
         dataModel.put("hello", test1);
 
 

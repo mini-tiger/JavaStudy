@@ -6,7 +6,7 @@
     <style>
         @page{ size: 11.69in 8.27in;}
         body{
-            font-family:SimHei;
+            font-family:simsun;
         }
         .blue{
             color: blue;
