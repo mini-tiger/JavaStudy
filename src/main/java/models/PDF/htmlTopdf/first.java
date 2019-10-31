@@ -20,9 +20,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static models.PDF.htmlTopdf.htmlStr.freeMarkerRender;
 
 /**
  * Created by lujianing on 2017/5/7.
@@ -43,32 +42,38 @@ import java.util.HashMap;
  */
 public class first {
 
-    private static final String CONTRACT = "D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//文件存储路径
-    private static final String TEMPLATE = "D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//模板存储路径
+//    private static final String CONTRACT = "D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//文件存储路径
+//    private static final String TEMPLATE = "D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf";//模板存储路径
 
 
-    private static final String PDFNAME = "11";//pdf文件名
-    private static final String HTMLNAME = "template.html";//html文件名
+    private static final String PDFNAME = "hello.pdf";//最后生成的pdf文件名
+    private static final String HTMLNAME = "hello.html";//中间使用TTL模板生成的html文件名
+    private static final String FTL = "hello.ftl";//FTL模板文件名
 
+    public static void contractHandler() throws Exception {
+        File directory = new File("");
+        Path BasePath = Paths.get(directory.getAbsolutePath(), "src", "main", "java", "models", "PDF", "htmlTopdf");
 
-    public static void contractHandler(String templateName,
-                                       HashMap paramMap) throws Exception {
         // 获取本地模板存储路径、文件存储路径
-        String templatePath = TEMPLATE;
-        String contractPath = CONTRACT;
+        String templateDirPath = BasePath.toString();
+        String contractPath = BasePath.toString();
+
         // 组装html和pdf合同的全路径URL
-        String localHtmlUrl = contractPath + HTMLNAME + ".html";
-        String localPdfPath = contractPath + "/";
+        String ftlPath = contractPath +File.separator+ FTL;
+        String localHtmlUrl = contractPath +File.separator+ HTMLNAME ;
+        String localPdfPath =  contractPath +File.separator+ PDFNAME ;
+
         // 判断本地路径是否存在如果不存在则创建
-        File localFile = new File(localPdfPath);
-        if (!localFile.exists()) {
-            localFile.mkdirs();
-        }
-        String localPdfUrl = localFile + "/" + PDFNAME + ".pdf";
+//        File localFile = new File(localPdfPath);
+//        if (!localFile.exists()) {
+//            localFile.mkdirs();
+//        }
+
 //        templateName = templateName + ".ftl";
-//        htmHandler(templatePath, templateName, localHtmlUrl, paramMap);// 生成html合同
-        pdfHandler("D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf\\hello.html", localPdfUrl);// 根据html合同生成pdf合同
-        deleteFile(localHtmlUrl);// 删除html格式合同
+        htmHandler(BasePath.toString(), FTL, localHtmlUrl);// 通过 FTL模板 生成html
+
+        pdfHandler(localHtmlUrl, localPdfPath);// 根据生成好的html生成pdf合同
+//        deleteFile(localHtmlUrl);// 删除html格式合同
 
         System.out.println("PDF生成成功");
     }
@@ -79,24 +84,13 @@ public class first {
     }
 
     private static void pdfHandler(String htmUrl, String pdfUrl) throws IOException, DocumentException {
-//        File htmFile = new File(htmUrl);
-////        File pdfFile = new File(pdfUrl);
-////        String url = htmFile.toURI().toURL().toString();
-////        OutputStream os = new FileOutputStream(pdfFile);
-////        ITextRenderer renderer = new ITextRenderer();
-////        renderer.setDocument(url);
-////        ITextFontResolver fontResolver = renderer.getFontResolver();
-////        fontResolver.addFont(TEMPLATE +File.separator+ "simsun.ttc", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
-////        renderer.layout();
-////        renderer.createPDF(os);
-////        os.close();
         try {
-            InputStream htmlFileStream = new FileInputStream("D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf\\hello.html");
+            InputStream htmlFileStream = new FileInputStream(htmUrl);
             // 创建一个document对象实例
-            Document document = new Document(PageSize.A4.rotate());
+            Document document = new Document(PageSize.A4.rotate()); // todo 横向
             // 为该Document创建一个Writer实例
             PdfWriter pdfwriter = PdfWriter.getInstance(document,
-                    new FileOutputStream("D:\\JavaStudy\\src\\main\\java\\models\\PDF\\htmlTopdf\\11.pdf"));
+                    new FileOutputStream(pdfUrl));
             pdfwriter.setViewerPreferences(PdfWriter.HideToolbar);
             // 打开当前的document
             document.open();
@@ -112,24 +106,49 @@ public class first {
 
     }
 
-    private static void htmHandler(String templatePath, String templateName, String hHtmlUrl, HashMap paramMap) throws IOException, TemplateException {
-        Configuration cfg = new Configuration();
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setDirectoryForTemplateLoading(new File(templatePath));
-        Template template = cfg.getTemplate(templateName);
-        File outHtmFile = new File(hHtmlUrl);
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outHtmFile)));
-        template.process(paramMap, writer);
-        writer.close();
+    private static void htmHandler(String templateDirPath, String templateName, String hHtmlUrl) throws IOException, TemplateException {
+        // 第一步：创建一个Configuration对象，直接new一个对象。构造方法的参数就是freemarker对于的版本号。
+        Configuration configuration = new Configuration();
+
+        // 第二步：设置模板文件所在的路径。
+        configuration.setDirectoryForTemplateLoading(new File(templateDirPath));
+
+        // 第三步：设置模板文件使用的字符集。一般就是utf-8.
+        configuration.setDefaultEncoding("utf-8");
+
+        // 第四步：加载一个模板，创建一个模板对象。 Template template = configuration.getTemplate("hello.ftl");
+
+        // 第五步：创建一个模板使用的数据集，可以是pojo也可以是map。一般是Map。
+        Map dataModel = new HashMap();
+        // 向数据集中添加数据
+        dataModel.put("key", "this is my first freemarker test葵花药业.");
+
+        HashMap<String, String> test1 = new LinkedHashMap<String, String>();
+
+        test1.put("one", "1");
+        test1.put("two", "2");
+        test1.put("three", "3");
+        for (int i=0;i<1000;i++){
+            test1.put(String.valueOf(i),String.valueOf(i*i));
+        }
+        dataModel.put("hello", test1);
+
+
+        // 第六步：创建一个Writer对象，一般创建一FileWriter对象，指定生成的文件名。
+        Writer out = new FileWriter(new File(hHtmlUrl));
+
+        Template template = configuration.getTemplate(templateName);
+        // 第七步：调用模板对象的process方法输出文件。
+        template.process(dataModel, out);
+
+        // 第八步：关闭流。
+        out.close();
     }
 
     public static void main(String[] args) throws Exception {
-        String templateName = "template.html";
-        HashMap paramMap = new HashMap<>();
-        paramMap.put("user", "nihao");
-        paramMap.put("url", "192.168.1.2");
-        paramMap.put("name", "生成成功");
-        contractHandler(templateName, paramMap);
+
+
+        contractHandler();
     }
 }
 class MyFontsProvider extends XMLWorkerFontProvider {
