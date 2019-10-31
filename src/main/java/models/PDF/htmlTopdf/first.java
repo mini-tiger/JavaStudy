@@ -161,8 +161,8 @@ class MyFontsProvider extends XMLWorkerFontProvider {
     public Font getFont(final String fontname, String encoding, float size, final int style) {
         String fntname = fontname;
         if (fntname == null) {
-            fntname = "宋体";//windows下
-            //fntname = "fontFile/simsun.ttf";//linux系统下
+            fntname = "宋体";//windows下 //linux系统下，需要fc-cache, simsun.ttf
+            //fntname = "fontFile/simsun.ttf";
         }
         if (size == 0) {
             size = 4;
